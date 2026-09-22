@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3]
+[gd_scene load_steps=5 format=3]
 
 [ext_resource type="Script" path="res://Fighter.gd" id="1_fighter"]
 
@@ -8,10 +8,23 @@ size = Vector2(32, 32)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
 size = Vector2(30, 32)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ground"]
+size = Vector2(1200, 40)
+
 [node name="Main" type="Node2D"]
 
+[node name="Ground" type="StaticBody2D" parent="."]
+position = Vector2(576, 620)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Ground"]
+shape = SubResource("RectangleShape2D_ground")
+
+[node name="Polygon2D" type="Polygon2D" parent="Ground"]
+color = Color(0.35, 0.3, 0.28, 1)
+polygon = PackedVector2Array(-600, -20, 600, -20, 600, 20, -600, 20)
+
 [node name="Player1" type="CharacterBody2D" parent="."]
-position = Vector2(450, 324)
+position = Vector2(450, 564)
 script = ExtResource("1_fighter")
 initial_facing = 1
 
@@ -44,12 +57,12 @@ color = Color(0.2, 0.85, 0.3, 1)
 polygon = PackedVector2Array(0, -5, 60, -5, 60, 5, 0, 5)
 
 [node name="Player2" type="CharacterBody2D" parent="."]
-position = Vector2(650, 324)
+position = Vector2(650, 564)
 script = ExtResource("1_fighter")
 move_left_action = "p2_left"
 move_right_action = "p2_right"
-move_up_action = "p2_up"
-move_down_action = "p2_down"
+jump_action = "p2_up"
+fast_fall_action = "p2_down"
 attack_action = "p2_attack"
 initial_facing = -1
 

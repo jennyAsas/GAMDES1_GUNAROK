@@ -2,12 +2,15 @@ extends CharacterBody2D
 
 @export var move_left_action := "move_left"
 @export var move_right_action := "move_right"
-@export var move_up_action := "move_up"
-@export var move_down_action := "move_down"
+@export var jump_action := "move_up"
+@export var fast_fall_action := "move_down"
 @export var attack_action := "attack"
 @export var initial_facing := 1
 
 const SPEED := 220.0
+const GRAVITY := 1200.0
+const JUMP_VELOCITY := -420.0
+const FAST_FALL_GRAVITY_MULT := 2.0
 const ATTACK_COOLDOWN_TIME := 0.4
 const ATTACK_ACTIVE_TIME := 0.15
 const ATTACK_OFFSET := 34.0
@@ -37,19 +40,23 @@ func _ready() -> void:
 	_update_health_bar()
 
 func _physics_process(delta: float) -> void:
-	var input_dir := Vector2(
-		Input.get_axis(move_left_action, move_right_action),
-		Input.get_axis(move_up_action, move_down_action)
-	)
-	velocity = input_dir * SPEED
+	if is_on_floor():
+		velocity.y = 0.0
+	else:
+		var gravity_mult := FAST_FALL_GRAVITY_MULT if Input.is_action_pressed(fast_fall_action) else 1.0
+		velocity.y += GRAVITY * gravity_mult * delta
+
+	if is_on_floor() and Input.is_action_just_pressed(jump_action):
+		velocity.y = JUMP_VELOCITY
+
+	var horizontal := Input.get_axis(move_left_action, move_right_action)
+	velocity.x = horizontal * SPEED
 	move_and_slide()
 
-	var viewport_size := get_viewport_rect().size
-	position.x = clamp(position.x, 16, viewport_size.x - 16)
-	position.y = clamp(position.y, 16, viewport_size.y - 16)
+	position.x = clamp(position.x, 16, get_viewport_rect().size.x - 16)
 
-	if input_dir.x != 0.0:
-		facing = signf(input_dir.x)
+	if horizontal != 0.0:
+		facing = signf(horizontal)
 		attack_area.position.x = ATTACK_OFFSET * facing
 
 	if attack_cooldown > 0.0:
@@ -112,6 +119,7 @@ func _ko_reset_all() -> void:
 func reset_round() -> void:
 	health = MAX_HEALTH
 	position = start_position
+	velocity = Vector2.ZERO
 	attack_cooldown = 0.0
 	attack_shape.disabled = true
 	body.scale = Vector2.ONE
