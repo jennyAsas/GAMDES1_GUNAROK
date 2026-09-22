@@ -1,21 +1,56 @@
-[gd_scene load_steps=3 format=3]
+[gd_scene load_steps=5 format=3]
 
-[ext_resource type="Script" path="res://Player.gd" id="1_player"]
+[ext_resource type="Script" path="res://Player1.gd" id="1_p1"]
+[ext_resource type="Script" path="res://Player2.gd" id="2_p2"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_1"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_body"]
 size = Vector2(32, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_attack"]
+size = Vector2(36, 32)
 
 [node name="Main" type="Node2D"]
 
-[node name="Player" type="CharacterBody2D" parent="."]
-position = Vector2(576, 324)
-script = ExtResource("1_player")
+[node name="Player1" type="CharacterBody2D" parent="."]
+position = Vector2(450, 324)
+script = ExtResource("1_p1")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
-shape = SubResource("RectangleShape2D_1")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player1"]
+shape = SubResource("RectangleShape2D_body")
 
-[node name="Polygon2D" type="Polygon2D" parent="Player"]
-color = Color(0.3, 0.7, 0.95, 1)
+[node name="Polygon2D" type="Polygon2D" parent="Player1"]
+color = Color(0.95, 0.6, 0.2, 1)
 polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
 
-[node name="MoveSound" type="AudioStreamPlayer2D" parent="Player"]
+[node name="AttackArea" type="Area2D" parent="Player1"]
+position = Vector2(32, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player1/AttackArea"]
+shape = SubResource("RectangleShape2D_attack")
+disabled = true
+
+[node name="Player2" type="CharacterBody2D" parent="."]
+position = Vector2(650, 324)
+script = ExtResource("2_p2")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player2"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="Polygon2D" type="Polygon2D" parent="Player2"]
+color = Color(0.9, 0.3, 0.3, 1)
+polygon = PackedVector2Array(-16, -16, 16, -16, 16, 16, -16, 16)
+
+[node name="Hurtbox" type="Area2D" parent="Player2"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player2/Hurtbox"]
+shape = SubResource("RectangleShape2D_body")
+
+[node name="HealthBarBG" type="Polygon2D" parent="Player2"]
+position = Vector2(-30, -50)
+color = Color(0.15, 0.15, 0.15, 1)
+polygon = PackedVector2Array(0, -5, 60, -5, 60, 5, 0, 5)
+
+[node name="HealthBarFill" type="Polygon2D" parent="Player2"]
+position = Vector2(-30, -50)
+color = Color(0.2, 0.85, 0.3, 1)
+polygon = PackedVector2Array(0, -5, 60, -5, 60, 5, 0, 5)
