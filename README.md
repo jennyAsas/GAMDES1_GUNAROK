@@ -12,7 +12,7 @@ attack/hurt/death states driven by `Fighter.gd`.
 
 **Controls**
 - Player 1: `A` / `D` to move, `W` to jump, `S` to fast-fall, `Space` to attack
-- Player 2: Left/Right arrows to move, `Up` to jump, `Down` to fast-fall, `/` to attack
+- Player 2: Left/Right arrows to move, `Up` to jump, `Down` to fast-fall, `Numpad 0` to attack
 
 Both players share one `Fighter.gd` script — movement/jump/attack keys and
 starting facing direction are set per-instance in `Main.tscn`.
