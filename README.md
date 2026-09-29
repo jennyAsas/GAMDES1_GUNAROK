@@ -16,3 +16,4 @@ attack/hurt/death states driven by `Fighter.gd`.
 
 Both players share one `Fighter.gd` script — movement/jump/attack keys and
 starting facing direction are set per-instance in `Main.tscn`.
+"# GAMDES1_GUNAROK" 
